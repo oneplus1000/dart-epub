@@ -129,6 +129,7 @@ class NavigationReader {
     navigationContentNode.attributes
         .forEach((xml.XmlAttribute navigationContentNodeAttribute) {
       String attributeValue = navigationContentNodeAttribute.value;
+      attributeValue = Uri.decodeComponent(attributeValue);
       switch (navigationContentNodeAttribute.name.local.toLowerCase()) {
         case "id":
           result.Id = attributeValue;
