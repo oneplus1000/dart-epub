@@ -13,6 +13,6 @@ dependencies:
   image: ">=1.1.33 <3.0.0"
   dart2_constant: ^1.0.1  
 dev_dependencies:
-  test: "^1.0.0"
+  test: "^1.5.1"
   path: "^1.5.1"
 
