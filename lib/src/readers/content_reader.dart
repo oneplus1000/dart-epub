@@ -18,6 +18,7 @@ class ContentReader {
     bookRef.Schema.Package.Manifest.Items
         .forEach((EpubManifestItem manifestItem) {
       String fileName = manifestItem.Href;
+      fileName = Uri.decodeComponent(fileName);
       String contentMimeType = manifestItem.MediaType;
       EpubContentType contentType =
           getContentTypeByContentMimeType(contentMimeType);
