@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:epub/epub.dart';
 import 'package:quiver/collection.dart' as collections;
 import 'package:quiver/core.dart';
 
@@ -38,8 +39,8 @@ class EpubChapterRef {
         collections.listsEqual(SubChapters, otherAs.SubChapters);
   }
 
-  Future<String> readHtmlContent() async {
-    return epubTextContentFileRef.readContentAsText();
+  Future<String> readHtmlContent({IBookDecrypt bookDecrypt}) async {
+    return epubTextContentFileRef.readContentAsText(bookDecrypt: bookDecrypt);
   }
 
   String toString() {

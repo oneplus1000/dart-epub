@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 
@@ -18,6 +19,10 @@ import 'ref_entities/epub_content_ref.dart';
 import 'ref_entities/epub_text_content_file_ref.dart';
 import 'schema/opf/epub_metadata_creator.dart';
 
+abstract class IBookDecrypt {
+  Future<Uint8List> decrypt(Uint8List input);
+}
+
 class EpubReader {
   /// Opens the book asynchronously without reading its content. Holds the handle to the EPUB file.
   static Future<EpubBookRef> openBook(List<int> bytes) async {
@@ -36,26 +41,32 @@ class EpubReader {
   }
 
   /// Opens the book asynchronously and reads all of its content into the memory. Does not hold the handle to the EPUB file.
-  static Future<EpubBook> readBook(List<int> bytes) async {
+  static Future<EpubBook> readBook(
+    List<int> bytes, {
+    IBookDecrypt bookDecrypt,
+  }) async {
     EpubBook result = new EpubBook();
-
     EpubBookRef epubBookRef = await openBook(bytes);
     result.Schema = epubBookRef.Schema;
     result.Title = epubBookRef.Title;
     result.AuthorList = epubBookRef.AuthorList;
     result.Author = epubBookRef.Author;
-    result.Content = await readContent(epubBookRef.Content);
+    result.Content = await readContent(epubBookRef.Content, bookDecrypt);
     result.CoverImage = await epubBookRef.readCover();
     List<EpubChapterRef> chapterRefs = await epubBookRef.getChapters();
-    result.Chapters = await readChapters(chapterRefs);
+    result.Chapters = await readChapters(chapterRefs, bookDecrypt);
 
     return result;
   }
 
-  static Future<EpubContent> readContent(EpubContentRef contentRef) async {
+  static Future<EpubContent> readContent(
+    EpubContentRef contentRef,
+    IBookDecrypt bookDecrypt,
+  ) async {
     EpubContent result = new EpubContent();
-    result.Html = await readTextContentFiles(contentRef.Html);
-    result.Css = await readTextContentFiles(contentRef.Css);
+    result.Html = await readTextContentFiles(contentRef.Html, bookDecrypt);
+    result.Css =
+        await readTextContentFiles(contentRef.Css, null); //css ไม่เข้ารหัส
     result.Images = await readByteContentFiles(contentRef.Images);
     result.Fonts = await readByteContentFiles(contentRef.Fonts);
     result.AllFiles = new Map<String, EpubContentFile>();
@@ -85,7 +96,9 @@ class EpubReader {
   }
 
   static Future<Map<String, EpubTextContentFile>> readTextContentFiles(
-      Map<String, EpubTextContentFileRef> textContentFileRefs) async {
+    Map<String, EpubTextContentFileRef> textContentFileRefs,
+    IBookDecrypt bookDecrypt,
+  ) async {
     Map<String, EpubTextContentFile> result =
         new Map<String, EpubTextContentFile>();
 
@@ -95,7 +108,9 @@ class EpubReader {
       textContentFile.FileName = value.FileName;
       textContentFile.ContentType = value.ContentType;
       textContentFile.ContentMimeType = value.ContentMimeType;
-      textContentFile.Content = await value.readContentAsText();
+      textContentFile.Content = await value.readContentAsText(
+        bookDecrypt: bookDecrypt,
+      );
       result[key] = textContentFile;
     });
     return result;
@@ -124,17 +139,19 @@ class EpubReader {
   }
 
   static Future<List<EpubChapter>> readChapters(
-      List<EpubChapterRef> chapterRefs) async {
+    List<EpubChapterRef> chapterRefs,
+    IBookDecrypt bookDecrypt,
+  ) async {
     List<EpubChapter> result = new List<EpubChapter>();
     await Future.forEach(chapterRefs, (EpubChapterRef chapterRef) async {
       EpubChapter chapter = new EpubChapter();
-
       chapter.Title = chapterRef.Title;
       chapter.ContentFileName = chapterRef.ContentFileName;
       chapter.Anchor = chapterRef.Anchor;
-      chapter.HtmlContent = await chapterRef.readHtmlContent();
-      chapter.SubChapters = await readChapters(chapterRef.SubChapters);
-
+      chapter.HtmlContent =
+          await chapterRef.readHtmlContent(bookDecrypt: bookDecrypt);
+      chapter.SubChapters =
+          await readChapters(chapterRef.SubChapters, bookDecrypt);
       result.add(chapter);
     });
     return result;
