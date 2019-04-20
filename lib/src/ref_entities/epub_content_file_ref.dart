@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
-import 'package:crypto/crypto.dart';
 import 'package:dart2_constant/convert.dart' as convert;
 import 'package:epub/epub.dart';
 import 'package:quiver/core.dart';
@@ -70,11 +69,11 @@ abstract class EpubContentFileRef {
       String result = convert.utf8.decode(contentStream);
       return result;
     }
-    var digest = sha1.convert(contentStream);
-    print('digest = $digest');
+    //var digest = sha1.convert(contentStream);
+    //print('digest = $digest');
     Uint8List buff1 = Uint8List.fromList(contentStream);
     var buff2 = await bookDecrypt.decrypt(buff1);
-    var len = buff2.length;
+    //var len = buff2.length;
     String result = convert.utf8.decode(buff2);
     return result;
   }
