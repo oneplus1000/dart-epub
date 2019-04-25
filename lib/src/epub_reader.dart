@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
+import 'package:epub/epub.dart';
 
 import 'entities/epub_book.dart';
 import 'entities/epub_byte_content_file.dart';
@@ -37,6 +38,8 @@ class EpubReader {
         .toList();
     bookRef.Author = bookRef.AuthorList.join(", ");
     bookRef.Content = await ContentReader.parseContentMap(bookRef);
+    //bookRef.Schema.Package.Spine.Items[0].IdRef
+
     return bookRef;
   }
 
@@ -51,11 +54,16 @@ class EpubReader {
     result.Title = epubBookRef.Title;
     result.AuthorList = epubBookRef.AuthorList;
     result.Author = epubBookRef.Author;
-    result.Content = await readContent(epubBookRef.Content, bookDecrypt);
+    result.Content = await readContent(
+      epubBookRef.Content,
+      bookDecrypt,
+    );
     result.CoverImage = await epubBookRef.readCover();
     List<EpubChapterRef> chapterRefs = await epubBookRef.getChapters();
-    result.Chapters = await readChapters(chapterRefs, bookDecrypt);
-
+    result.Chapters = await readChapters(
+      chapterRefs,
+      bookDecrypt,
+    );
     return result;
   }
 
@@ -64,9 +72,14 @@ class EpubReader {
     IBookDecrypt bookDecrypt,
   ) async {
     EpubContent result = new EpubContent();
-    result.Html = await readTextContentFiles(contentRef.Html, bookDecrypt);
-    result.Css =
-        await readTextContentFiles(contentRef.Css, null); //css ไม่เข้ารหัส
+    result.Html = await readTextContentFiles(
+      contentRef.Html,
+      bookDecrypt,
+    );
+    result.Css = await readTextContentFiles(
+      contentRef.Css,
+      null,
+    ); //css ไม่เข้ารหัส
     result.Images = await readByteContentFiles(contentRef.Images);
     result.Fonts = await readByteContentFiles(contentRef.Fonts);
     result.AllFiles = new Map<String, EpubContentFile>();
@@ -104,12 +117,14 @@ class EpubReader {
 
     await Future.forEach(textContentFileRefs.keys, (key) async {
       EpubContentFileRef value = textContentFileRefs[key];
+      bool isEncript = _isEncript(key, value.epubBookRef.Schema.Package);
+      print('----xxx->' + key + '  isEncript:' + isEncript.toString());
       EpubTextContentFile textContentFile = new EpubTextContentFile();
       textContentFile.FileName = value.FileName;
       textContentFile.ContentType = value.ContentType;
       textContentFile.ContentMimeType = value.ContentMimeType;
       textContentFile.Content = await value.readContentAsText(
-        bookDecrypt: bookDecrypt,
+        bookDecrypt: isEncript ? bookDecrypt : null,
       );
       result[key] = textContentFile;
     });
@@ -148,12 +163,33 @@ class EpubReader {
       chapter.Title = chapterRef.Title;
       chapter.ContentFileName = chapterRef.ContentFileName;
       chapter.Anchor = chapterRef.Anchor;
-      chapter.HtmlContent =
-          await chapterRef.readHtmlContent(bookDecrypt: bookDecrypt);
-      chapter.SubChapters =
-          await readChapters(chapterRef.SubChapters, bookDecrypt);
+      chapter.HtmlContent = await chapterRef.readHtmlContent(
+        bookDecrypt: bookDecrypt,
+      );
+      chapter.SubChapters = await readChapters(
+        chapterRef.SubChapters,
+        bookDecrypt,
+      );
       result.add(chapter);
     });
     return result;
+  }
+
+  static bool _isEncript(String fileKey, EpubPackage pkg) {
+    var manifestItems = pkg.Manifest.Items;
+    var spinItems = pkg.Spine.Items;
+    for (var manifestItem in manifestItems) {
+      if (fileKey == Uri.decodeComponent(manifestItem.Href)) {
+        for (var spinItem in spinItems) {
+          print(spinItem.IdRef + " == " + manifestItem.Id);
+          if (spinItem.IdRef == manifestItem.Id) {
+            return true;
+          }
+        }
+        break;
+      }
+    }
+    //}
+    return false;
   }
 }
