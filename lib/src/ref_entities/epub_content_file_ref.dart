@@ -71,7 +71,7 @@ abstract class EpubContentFileRef {
       return result;
     }
     var digest = sha1.convert(contentStream);
-    print('digest = $digest');
+    //print('digest = $digest');
     Uint8List buff1 = Uint8List.fromList(contentStream);
     var buff2 = await bookDecrypt.decrypt(buff1);
     //var len = buff2.length;

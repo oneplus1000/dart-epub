@@ -118,7 +118,7 @@ class EpubReader {
     await Future.forEach(textContentFileRefs.keys, (key) async {
       EpubContentFileRef value = textContentFileRefs[key];
       bool isEncript = _isEncript(key, value.epubBookRef.Schema.Package);
-      print('----xxx->' + key + '  isEncript:' + isEncript.toString());
+      //print('----xxx->' + key + '  isEncript:' + isEncript.toString());
       EpubTextContentFile textContentFile = new EpubTextContentFile();
       textContentFile.FileName = value.FileName;
       textContentFile.ContentType = value.ContentType;
@@ -181,7 +181,7 @@ class EpubReader {
     for (var manifestItem in manifestItems) {
       if (fileKey == Uri.decodeComponent(manifestItem.Href)) {
         for (var spinItem in spinItems) {
-          print(spinItem.IdRef + " == " + manifestItem.Id);
+          //print(spinItem.IdRef + " == " + manifestItem.Id);
           if (spinItem.IdRef == manifestItem.Id) {
             return true;
           }
