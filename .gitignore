@@ -29,3 +29,6 @@ pubspec.lock
 
 #Ignore VSCode Directory
 .vscode/
+
+android/local.properties
+ios/Flutter/
