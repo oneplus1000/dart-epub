@@ -69,6 +69,7 @@ abstract class EpubContentFileRef {
       String result = convert.utf8.decode(contentStream);
       return result;
     }
+    //print('contentStream:' + contentStream.toString());
     //var digest = sha1.convert(contentStream);
     //print('digest = $digest');
     Uint8List buff1 = Uint8List.fromList(contentStream);

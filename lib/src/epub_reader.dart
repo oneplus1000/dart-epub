@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
+import 'package:epub/src/entities/epub_schema.dart';
 
 import 'entities/epub_book.dart';
 import 'entities/epub_byte_content_file.dart';
@@ -51,7 +52,8 @@ class EpubReader {
     result.Title = epubBookRef.Title;
     result.AuthorList = epubBookRef.AuthorList;
     result.Author = epubBookRef.Author;
-    result.Content = await readContent(epubBookRef.Content, bookDecrypt);
+    result.Content =
+        await readContent(epubBookRef.Content, bookDecrypt, epubBookRef.Schema);
     result.CoverImage = await epubBookRef.readCover();
     List<EpubChapterRef> chapterRefs = await epubBookRef.getChapters();
     result.Chapters = await readChapters(chapterRefs, bookDecrypt);
@@ -62,11 +64,13 @@ class EpubReader {
   static Future<EpubContent> readContent(
     EpubContentRef contentRef,
     IBookDecrypt bookDecrypt,
+    EpubSchema schema,
   ) async {
     EpubContent result = new EpubContent();
-    result.Html = await readTextContentFiles(contentRef.Html, bookDecrypt);
-    result.Css =
-        await readTextContentFiles(contentRef.Css, null); //css ไม่เข้ารหัส
+    result.Html =
+        await readTextContentFiles(contentRef.Html, bookDecrypt, schema);
+    result.Css = await readTextContentFiles(
+        contentRef.Css, null, null); //css ไม่เข้ารหัส
     result.Images = await readByteContentFiles(contentRef.Images);
     result.Fonts = await readByteContentFiles(contentRef.Fonts);
     result.AllFiles = new Map<String, EpubContentFile>();
@@ -95,9 +99,26 @@ class EpubReader {
     return result;
   }
 
+  static bool _compareFilenameWithIdRef(String filename, String idRef) {
+    if (filename == null || idRef == null) {
+      return false;
+    }
+
+    var name = filename.trim().toLowerCase();
+    if (name.contains('/') == true) {
+      int lastIndexOf = name.lastIndexOf('/');
+      name = name.substring(lastIndexOf + 1);
+    }
+    if (name == idRef.trim().toLowerCase()) {
+      return true;
+    }
+    return false;
+  }
+
   static Future<Map<String, EpubTextContentFile>> readTextContentFiles(
     Map<String, EpubTextContentFileRef> textContentFileRefs,
     IBookDecrypt bookDecrypt,
+    EpubSchema schema,
   ) async {
     Map<String, EpubTextContentFile> result =
         new Map<String, EpubTextContentFile>();
@@ -108,9 +129,35 @@ class EpubReader {
       textContentFile.FileName = value.FileName;
       textContentFile.ContentType = value.ContentType;
       textContentFile.ContentMimeType = value.ContentMimeType;
-      textContentFile.Content = await value.readContentAsText(
-        bookDecrypt: bookDecrypt,
-      );
+
+      try {
+        bool inSpine = false;
+        if (bookDecrypt != null && schema != null) {
+          for (var item in schema.Package.Spine.Items) {
+            if (_compareFilenameWithIdRef(value.FileName, item.IdRef) == true) {
+              inSpine = true;
+              break;
+            }
+          }
+        }
+        if (inSpine == true) {
+          //อยู่ใน spine เข้ารหัส
+          textContentFile.Content = await value.readContentAsText(
+            bookDecrypt: bookDecrypt,
+          );
+        } else {
+          //ไม่อยู่ใน spine ไม่เข้ารหัส
+          textContentFile.Content = await value.readContentAsText(
+            bookDecrypt: null,
+          );
+        }
+      } catch (err) {
+        var content = await value.readContentAsText(
+          bookDecrypt: null,
+        );
+        print('ERR:' + value.FileName + '\n' + content);
+        textContentFile.Content = 'ไฟล์มีปัญหากรุณาติดต่อ MangaQube';
+      }
       result[key] = textContentFile;
     });
     return result;
