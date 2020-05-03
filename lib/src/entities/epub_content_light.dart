@@ -2,7 +2,6 @@ import 'package:epub/src/entities/epub_byte_content_file_light.dart';
 import 'package:quiver/collection.dart' as collections;
 import 'package:quiver/core.dart';
 
-import 'epub_byte_content_file.dart';
 import 'epub_content_file.dart';
 import 'epub_text_content_file.dart';
 
@@ -10,14 +9,14 @@ class EpubContentLight {
   Map<String, EpubTextContentFile> Html;
   Map<String, EpubTextContentFile> Css;
   Map<String, EpubByteContentFileLight> Images;
-  Map<String, EpubByteContentFile> Fonts;
+  Map<String, EpubByteContentFileLight> Fonts;
   Map<String, EpubContentFile> AllFiles;
 
   EpubContent() {
     Html = new Map<String, EpubTextContentFile>();
     Css = new Map<String, EpubTextContentFile>();
     Images = new Map<String, EpubByteContentFileLight>();
-    Fonts = new Map<String, EpubByteContentFile>();
+    Fonts = new Map<String, EpubByteContentFileLight>();
     AllFiles = new Map<String, EpubContentFile>();
   }
 

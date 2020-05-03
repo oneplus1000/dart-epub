@@ -96,7 +96,7 @@ class EpubReader {
     result.Css = await readTextContentFiles(
         contentRef.Css, null, null); //css ไม่เข้ารหัส
     result.Images = await readByteContentFilesLight(contentRef.Images);
-    result.Fonts = await readByteContentFiles(contentRef.Fonts);
+    result.Fonts = await readByteContentFilesLight(contentRef.Fonts);
     result.AllFiles = new Map<String, EpubContentFile>();
 
     result.Html.forEach((String key, EpubTextContentFile value) {
@@ -109,7 +109,7 @@ class EpubReader {
     result.Images.forEach((String key, EpubByteContentFileLight value) {
       result.AllFiles[key] = value;
     });
-    result.Fonts.forEach((String key, EpubByteContentFile value) {
+    result.Fonts.forEach((String key, EpubByteContentFileLight value) {
       result.AllFiles[key] = value;
     });
 
