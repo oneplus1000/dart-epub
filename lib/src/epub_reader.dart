@@ -161,7 +161,11 @@ class EpubReader {
     return result;
   }
 
-  static bool _compareFilenameWithIdRef(String filename, String idRef) {
+  static bool _compareFilenameWithIdRef(
+    String filename,
+    String idRef,
+    EpubSchema schema,
+  ) {
     if (filename == null || idRef == null) {
       return false;
     }
@@ -174,6 +178,18 @@ class EpubReader {
     if (name == idRef.trim().toLowerCase()) {
       return true;
     }
+
+    if (schema == null) {
+      return false;
+    }
+
+    //ถ้ายังไม่ตรงกันเข้าไปค้นใน Manifest
+    for (var item in schema.Package.Manifest.Items) {
+      if (item.Href == filename && item.Id == idRef) {
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -196,7 +212,8 @@ class EpubReader {
         bool inSpine = false;
         if (bookDecrypt != null && schema != null) {
           for (var item in schema.Package.Spine.Items) {
-            if (_compareFilenameWithIdRef(value.FileName, item.IdRef) == true) {
+            if (_compareFilenameWithIdRef(value.FileName, item.IdRef, schema) ==
+                true) {
               inSpine = true;
               break;
             }
@@ -214,10 +231,13 @@ class EpubReader {
           );
         }
       } catch (err) {
+        /*
         var content = await value.readContentAsText(
           bookDecrypt: null,
         );
-        print('ERR:' + value.FileName + '\n' + content);
+        */
+        throw Exception("ไฟล์ $key มีปัญหา $err");
+        print('ERR:' + value.FileName + ' $err\n');
         textContentFile.Content = 'ไฟล์มีปัญหากรุณาติดต่อ MangaQube';
       }
       result[key] = textContentFile;
