@@ -84,7 +84,7 @@ class NavigationReader {
     EpubNavigationDocTitle navigationDocTitle =
         readNavigationDocTitle(docTitleNode);
     result.DocTitle = navigationDocTitle;
-    result.DocAuthors = new List<EpubNavigationDocAuthor>();
+    result.DocAuthors = <EpubNavigationDocAuthor>[];
     ncxNode
         .findElements("docAuthor", namespace: ncxNamespace)
         .forEach((xml.XmlElement docAuthorNode) {
@@ -111,7 +111,7 @@ class NavigationReader {
       result.PageList = pageList;
     }
 
-    result.NavLists = new List<EpubNavigationList>();
+    result.NavLists = <EpubNavigationList>[];
     ncxNode
         .findElements("navList", namespace: ncxNamespace)
         .forEach((xml.XmlElement navigationListNode) {
@@ -150,7 +150,7 @@ class NavigationReader {
   static EpubNavigationDocAuthor readNavigationDocAuthor(
       xml.XmlElement docAuthorNode) {
     EpubNavigationDocAuthor result = new EpubNavigationDocAuthor();
-    result.Authors = new List<String>();
+    result.Authors = <String>[];
     docAuthorNode.children
         .where((xml.XmlNode node) => node is xml.XmlElement)
         .map((xml.XmlNode node) => node as xml.XmlElement)
@@ -165,7 +165,7 @@ class NavigationReader {
   static EpubNavigationDocTitle readNavigationDocTitle(
       xml.XmlElement docTitleNode) {
     EpubNavigationDocTitle result = new EpubNavigationDocTitle();
-    result.Titles = new List<String>();
+    result.Titles = <String>[];
     docTitleNode.children
         .where((xml.XmlNode node) => node is xml.XmlElement)
         .map((xml.XmlNode node) => node as xml.XmlElement)
@@ -179,7 +179,7 @@ class NavigationReader {
 
   static EpubNavigationHead readNavigationHead(xml.XmlElement headNode) {
     EpubNavigationHead result = new EpubNavigationHead();
-    result.Metadata = new List<EpubNavigationHeadMeta>();
+    result.Metadata = <EpubNavigationHeadMeta>[];
 
     headNode.children
         .where((xml.XmlNode node) => node is xml.XmlElement)
@@ -275,7 +275,7 @@ class NavigationReader {
 
   static EpubNavigationMap readNavigationMap(xml.XmlElement navigationMapNode) {
     EpubNavigationMap result = new EpubNavigationMap();
-    result.Points = new List<EpubNavigationPoint>();
+    result.Points = <EpubNavigationPoint>[];
     navigationMapNode.children
         .where((xml.XmlNode node) => node is xml.XmlElement)
         .map((xml.XmlNode node) => node as xml.XmlElement)
@@ -292,7 +292,7 @@ class NavigationReader {
   static EpubNavigationPageList readNavigationPageList(
       xml.XmlElement navigationPageListNode) {
     EpubNavigationPageList result = new EpubNavigationPageList();
-    result.Targets = new List<EpubNavigationPageTarget>();
+    result.Targets = <EpubNavigationPageTarget>[];
     navigationPageListNode.children
         .where((xml.XmlNode node) => node is xml.XmlElement)
         .map((xml.XmlNode node) => node as xml.XmlElement)
@@ -310,7 +310,7 @@ class NavigationReader {
   static EpubNavigationPageTarget readNavigationPageTarget(
       xml.XmlElement navigationPageTargetNode) {
     EpubNavigationPageTarget result = new EpubNavigationPageTarget();
-    result.NavigationLabels = new List<EpubNavigationLabel>();
+    result.NavigationLabels = <EpubNavigationLabel>[];
     navigationPageTargetNode.attributes
         .forEach((xml.XmlAttribute navigationPageTargetNodeAttribute) {
       String attributeValue = navigationPageTargetNodeAttribute.value;
@@ -388,8 +388,8 @@ class NavigationReader {
           "Incorrect EPUB navigation point: point ID is missing.");
     }
 
-    result.NavigationLabels = new List<EpubNavigationLabel>();
-    result.ChildNavigationPoints = new List<EpubNavigationPoint>();
+    result.NavigationLabels = <EpubNavigationLabel>[];
+    result.ChildNavigationPoints = <EpubNavigationPoint>[];
     navigationPointNode.children
         .where((xml.XmlNode node) => node is xml.XmlElement)
         .map((xml.XmlNode node) => node as xml.XmlElement)
