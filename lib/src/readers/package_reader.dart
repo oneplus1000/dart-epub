@@ -22,7 +22,7 @@ import '../schema/opf/epub_version.dart';
 class PackageReader {
   static EpubGuide readGuide(xml.XmlElement guideNode) {
     EpubGuide result = new EpubGuide();
-    result.Items = new List<EpubGuideReference>();
+    result.Items = <EpubGuideReference>[];
     guideNode.children
         .where((xml.XmlNode node) => node is xml.XmlElement)
         .map((xml.XmlNode node) => node as xml.XmlElement)
@@ -56,7 +56,7 @@ class PackageReader {
 
   static EpubManifest readManifest(xml.XmlElement manifestNode) {
     EpubManifest result = new EpubManifest();
-    result.Items = new List<EpubManifestItem>();
+    result.Items = <EpubManifestItem>[];
     manifestNode.children
         .where((xml.XmlNode node) => node is xml.XmlElement)
         .map((xml.XmlNode node) => node as xml.XmlElement)
@@ -107,21 +107,21 @@ class PackageReader {
   static EpubMetadata readMetadata(
       xml.XmlElement metadataNode, EpubVersion epubVersion) {
     EpubMetadata result = new EpubMetadata();
-    result.Titles = new List<String>();
-    result.Creators = new List<EpubMetadataCreator>();
-    result.Subjects = new List<String>();
-    result.Publishers = new List<String>();
-    result.Contributors = new List<EpubMetadataContributor>();
-    result.Dates = new List<EpubMetadataDate>();
-    result.Types = new List<String>();
-    result.Formats = new List<String>();
-    result.Identifiers = new List<EpubMetadataIdentifier>();
-    result.Sources = new List<String>();
-    result.Languages = new List<String>();
-    result.Relations = new List<String>();
-    result.Coverages = new List<String>();
-    result.Rights = new List<String>();
-    result.MetaItems = new List<EpubMetadataMeta>();
+    result.Titles = <String>[];
+    result.Creators = <EpubMetadataCreator>[];
+    result.Subjects = <String>[];
+    result.Publishers = <String>[];
+    result.Contributors = <EpubMetadataContributor>[];
+    result.Dates = <EpubMetadataDate>[];
+    result.Types = <String>[];
+    result.Formats = <String>[];
+    result.Identifiers = <EpubMetadataIdentifier>[];
+    result.Sources = <String>[];
+    result.Languages = <String>[];
+    result.Relations = <String>[];
+    result.Coverages = <String>[];
+    result.Rights = <String>[];
+    result.MetaItems = <EpubMetadataMeta>[];
     metadataNode.children
         .where((xml.XmlNode node) => node is xml.XmlElement)
         .map((xml.XmlNode node) => node as xml.XmlElement)
@@ -362,7 +362,7 @@ class PackageReader {
 
   static EpubSpine readSpine(xml.XmlElement spineNode) {
     EpubSpine result = new EpubSpine();
-    result.Items = new List<EpubSpineItemRef>();
+    result.Items = <EpubSpineItemRef>[];
     String tocAttribute = spineNode.getAttribute("toc");
     if (tocAttribute == null || tocAttribute.isEmpty)
       throw new Exception("Incorrect EPUB spine: TOC is missing");
