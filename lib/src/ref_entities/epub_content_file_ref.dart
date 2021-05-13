@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
-import 'package:dart2_constant/convert.dart' as convert;
+//import 'package:dart2_constant/convert.dart' as convert;
 import 'package:epub/epub.dart';
 import 'package:quiver/core.dart';
 
@@ -66,7 +67,7 @@ abstract class EpubContentFileRef {
   Future<String> readContentAsText({IBookDecrypt bookDecrypt}) async {
     List<int> contentStream = getContentStream();
     if (bookDecrypt == null) {
-      String result = convert.utf8.decode(contentStream);
+      String result = utf8.decode(contentStream);
       return result;
     }
     //print('contentStream:' + contentStream.toString());
@@ -75,7 +76,7 @@ abstract class EpubContentFileRef {
     Uint8List buff1 = Uint8List.fromList(contentStream);
     var buff2 = await bookDecrypt.decrypt(buff1);
     //var len = buff2.length;
-    String result = convert.utf8.decode(buff2);
+    String result = utf8.decode(buff2);
     return result;
   }
 }
