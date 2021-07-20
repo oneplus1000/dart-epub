@@ -13,10 +13,10 @@ main() async {
 
   final EpubNavigationHead reference = generator.randomEpubNavigationHead();
 
-  EpubNavigationHead testGuideReference;
+  EpubNavigationHead? testGuideReference;
   setUp(() async {
     testGuideReference = new EpubNavigationHead()
-      ..Metadata = List.from(reference.Metadata);
+      ..Metadata = List.from(reference.Metadata!);
   });
   tearDown(() async {
     testGuideReference = null;
@@ -28,7 +28,7 @@ main() async {
       });
 
       test("is false when Metadata changes", () async {
-        testGuideReference.Metadata.add(generator.randomNavigationHeadMeta());
+        testGuideReference!.Metadata!.add(generator.randomNavigationHeadMeta());
         expect(testGuideReference, isNot(reference));
       });
     });
@@ -39,7 +39,7 @@ main() async {
       });
 
       test("is false when Metadata changes", () async {
-        testGuideReference.Metadata.add(generator.randomNavigationHeadMeta());
+        testGuideReference!.Metadata!.add(generator.randomNavigationHeadMeta());
         expect(testGuideReference.hashCode, isNot(reference.hashCode));
       });
     });

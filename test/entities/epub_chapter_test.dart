@@ -12,10 +12,10 @@ main() async {
     ..SubChapters = []
     ..Title = "A New Look at Chapters";
 
-  EpubChapter testChapter;
+  EpubChapter? testChapter;
   setUp(() async {
     testChapter = new EpubChapter();
-    testChapter
+    testChapter!
       ..Anchor = reference.Anchor
       ..ContentFileName = reference.ContentFileName
       ..HtmlContent = reference.HtmlContent
@@ -32,17 +32,18 @@ main() async {
       });
 
       test("is false when HtmlContent changes", () async {
-        testChapter.HtmlContent = "<html>I'm sure this isn't valid Html</html>";
+        testChapter!.HtmlContent =
+            "<html>I'm sure this isn't valid Html</html>";
         expect(testChapter, isNot(reference));
       });
 
       test("is false when Anchor changes", () async {
-        testChapter.Anchor = "NotAnAnchor";
+        testChapter!.Anchor = "NotAnAnchor";
         expect(testChapter, isNot(reference));
       });
 
       test("is false when ContentFileName changes", () async {
-        testChapter.ContentFileName = "NotOrthros";
+        testChapter!.ContentFileName = "NotOrthros";
         expect(testChapter, isNot(reference));
       });
 
@@ -51,12 +52,12 @@ main() async {
         chapter
           ..Title = "A Brave new Epub"
           ..ContentFileName = "orthros.txt";
-        testChapter.SubChapters = [chapter];
+        testChapter!.SubChapters = [chapter];
         expect(testChapter, isNot(reference));
       });
 
       test("is false when Title changes", () async {
-        testChapter.Title = "A Boring Old World";
+        testChapter!.Title = "A Boring Old World";
         expect(testChapter, isNot(reference));
       });
     });
@@ -71,17 +72,18 @@ main() async {
       });
 
       test("is false when HtmlContent changes", () async {
-        testChapter.HtmlContent = "<html>I'm sure this isn't valid Html</html>";
+        testChapter!.HtmlContent =
+            "<html>I'm sure this isn't valid Html</html>";
         expect(testChapter.hashCode, isNot(reference.hashCode));
       });
 
       test("is false when Anchor changes", () async {
-        testChapter.Anchor = "NotAnAnchor";
+        testChapter!.Anchor = "NotAnAnchor";
         expect(testChapter.hashCode, isNot(reference.hashCode));
       });
 
       test("is false when ContentFileName changes", () async {
-        testChapter.ContentFileName = "NotOrthros";
+        testChapter!.ContentFileName = "NotOrthros";
         expect(testChapter.hashCode, isNot(reference.hashCode));
       });
 
@@ -90,12 +92,12 @@ main() async {
         chapter
           ..Title = "A Brave new Epub"
           ..ContentFileName = "orthros.txt";
-        testChapter.SubChapters = [chapter];
+        testChapter!.SubChapters = [chapter];
         expect(testChapter.hashCode, isNot(reference.hashCode));
       });
 
       test("is false when Title changes", () async {
-        testChapter.Title = "A Boring Old World";
+        testChapter!.Title = "A Boring Old World";
         expect(testChapter.hashCode, isNot(reference.hashCode));
       });
     });

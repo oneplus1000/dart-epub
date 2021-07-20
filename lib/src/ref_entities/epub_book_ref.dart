@@ -12,13 +12,13 @@ import 'epub_chapter_ref.dart';
 import 'epub_content_ref.dart';
 
 class EpubBookRef {
-  Archive _epubArchive;
+  Archive? _epubArchive;
 
-  String Title;
-  String Author;
-  List<String> AuthorList;
-  EpubSchema Schema;
-  EpubContentRef Content;
+  String? Title;
+  String? Author;
+  List<String?>? AuthorList;
+  EpubSchema? Schema;
+  EpubContentRef? Content;
   EpubBookRef(Archive epubArchive) {
     this._epubArchive = epubArchive;
   }
@@ -44,7 +44,7 @@ class EpubBookRef {
         collections.listsEqual(AuthorList, otherAs.AuthorList);
   }
 
-  Archive EpubArchive() {
+  Archive? EpubArchive() {
     return _epubArchive;
   }
 
@@ -52,7 +52,7 @@ class EpubBookRef {
     return await ChapterReader.getChapters(this);
   }
 
-  Future<Image> readCover() async {
+  Future<Image?> readCover() async {
     return await BookCoverReader.readBookCover(this);
   }
 }

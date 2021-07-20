@@ -8,7 +8,7 @@ main() async {
     ..Date = "a date"
     ..Event = "Some important event";
 
-  EpubMetadataDate testMetadataDate;
+  EpubMetadataDate? testMetadataDate;
   setUp(() async {
     testMetadataDate = new EpubMetadataDate()
       ..Date = reference.Date
@@ -25,11 +25,11 @@ main() async {
       });
 
       test("is false when Date changes", () async {
-        testMetadataDate.Date = "A different Date";
+        testMetadataDate!.Date = "A different Date";
         expect(testMetadataDate, isNot(reference));
       });
       test("is false when Event changes", () async {
-        testMetadataDate.Event = "A non important event";
+        testMetadataDate!.Event = "A non important event";
         expect(testMetadataDate, isNot(reference));
       });
     });
@@ -40,11 +40,11 @@ main() async {
       });
 
       test("is false when Date changes", () async {
-        testMetadataDate.Date = "A different date";
+        testMetadataDate!.Date = "A different date";
         expect(testMetadataDate.hashCode, isNot(reference.hashCode));
       });
       test("is false when Event changes", () async {
-        testMetadataDate.Event = "A non important event";
+        testMetadataDate!.Event = "A non important event";
         expect(testMetadataDate.hashCode, isNot(reference.hashCode));
       });
     });

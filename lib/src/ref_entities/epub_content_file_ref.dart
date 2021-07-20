@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 //import 'package:dart2_constant/convert.dart' as convert;
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:epub/epub.dart';
 import 'package:quiver/core.dart';
 
@@ -12,13 +13,13 @@ import '../utils/zip_path_utils.dart';
 import 'epub_book_ref.dart';
 
 abstract class EpubContentFileRef {
-  EpubBookRef epubBookRef;
+  EpubBookRef? epubBookRef;
 
-  String FileName;
+  String? FileName;
 
-  EpubContentType ContentType;
-  String ContentMimeType;
-  EpubContentFileRef(EpubBookRef epubBookRef) {
+  EpubContentType? ContentType;
+  String? ContentMimeType;
+  EpubContentFileRef(EpubBookRef? epubBookRef) {
     this.epubBookRef = epubBookRef;
   }
 
@@ -34,11 +35,10 @@ abstract class EpubContentFileRef {
   }
 
   ArchiveFile getContentFileEntry() {
-    String contentFilePath =
-        ZipPathUtils.combine(epubBookRef.Schema.ContentDirectoryPath, FileName);
-    ArchiveFile contentFileEntry = epubBookRef.EpubArchive().files.firstWhere(
-        (ArchiveFile x) => x.name == contentFilePath,
-        orElse: () => null);
+    String? contentFilePath =
+        ZipPathUtils.combine(epubBookRef!.Schema!.ContentDirectoryPath, FileName);
+    ArchiveFile? contentFileEntry = epubBookRef!.EpubArchive()!.files.firstWhereOrNull(
+        (ArchiveFile x) => x.name == contentFilePath);
     if (contentFileEntry == null)
       throw new Exception(
           "EPUB parsing error: file ${contentFilePath} not found in archive.");
@@ -64,7 +64,7 @@ abstract class EpubContentFileRef {
     return content;
   }
 
-  Future<String> readContentAsText({IBookDecrypt bookDecrypt}) async {
+  Future<String> readContentAsText({IBookDecrypt? bookDecrypt}) async {
     List<int> contentStream = getContentStream();
     if (bookDecrypt == null) {
       String result = utf8.decode(contentStream);

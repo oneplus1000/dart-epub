@@ -13,7 +13,7 @@ main() async {
     ..RequiredModules = "nodejs require()"
     ..RequiredNamespace = ".NET Namespace";
 
-  EpubManifestItem testManifestItem;
+  EpubManifestItem? testManifestItem;
   setUp(() async {
     testManifestItem = new EpubManifestItem()
       ..Fallback = reference.Fallback
@@ -35,31 +35,31 @@ main() async {
       });
 
       test("is false when Fallback changes", () async {
-        testManifestItem.Fallback = "Some Different Fallback";
+        testManifestItem!.Fallback = "Some Different Fallback";
         expect(testManifestItem, isNot(reference));
       });
       test("is false when FallbackStyle changes", () async {
-        testManifestItem.FallbackStyle = "A less than Stylish Fallback";
+        testManifestItem!.FallbackStyle = "A less than Stylish Fallback";
         expect(testManifestItem, isNot(reference));
       });
       test("is false when Href changes", () async {
-        testManifestItem.Href = "A different Href";
+        testManifestItem!.Href = "A different Href";
         expect(testManifestItem, isNot(reference));
       });
       test("is false when Id changes", () async {
-        testManifestItem.Id = "A guarenteed unique Id";
+        testManifestItem!.Id = "A guarenteed unique Id";
         expect(testManifestItem, isNot(reference));
       });
       test("is false when MediaType changes", () async {
-        testManifestItem.MediaType = "RealPlayer";
+        testManifestItem!.MediaType = "RealPlayer";
         expect(testManifestItem, isNot(reference));
       });
       test("is false when RequiredModules changes", () async {
-        testManifestItem.RequiredModules = "A non node-js module";
+        testManifestItem!.RequiredModules = "A non node-js module";
         expect(testManifestItem, isNot(reference));
       });
       test("is false when RequiredNamespaces changes", () async {
-        testManifestItem.RequiredNamespace = "Some non-dot net namespace";
+        testManifestItem!.RequiredNamespace = "Some non-dot net namespace";
         expect(testManifestItem, isNot(reference));
       });
     });
@@ -70,31 +70,31 @@ main() async {
       });
 
       test("is false when Fallback changes", () async {
-        testManifestItem.Fallback = "Some Different Fallback";
+        testManifestItem!.Fallback = "Some Different Fallback";
         expect(testManifestItem.hashCode, isNot(reference.hashCode));
       });
       test("is false when FallbackStyle changes", () async {
-        testManifestItem.FallbackStyle = "A less than Stylish Fallback";
+        testManifestItem!.FallbackStyle = "A less than Stylish Fallback";
         expect(testManifestItem.hashCode, isNot(reference.hashCode));
       });
       test("is false when Href changes", () async {
-        testManifestItem.Href = "A different Href";
+        testManifestItem!.Href = "A different Href";
         expect(testManifestItem.hashCode, isNot(reference.hashCode));
       });
       test("is false when Id changes", () async {
-        testManifestItem.Id = "A guarenteed unique Id";
+        testManifestItem!.Id = "A guarenteed unique Id";
         expect(testManifestItem.hashCode, isNot(reference.hashCode));
       });
       test("is false when MediaType changes", () async {
-        testManifestItem.MediaType = "RealPlayer";
+        testManifestItem!.MediaType = "RealPlayer";
         expect(testManifestItem.hashCode, isNot(reference.hashCode));
       });
       test("is false when RequiredModules changes", () async {
-        testManifestItem.RequiredModules = "A non node-js module";
+        testManifestItem!.RequiredModules = "A non node-js module";
         expect(testManifestItem.hashCode, isNot(reference.hashCode));
       });
       test("is false when RequiredNamespaces changes", () async {
-        testManifestItem.RequiredNamespace = "Some non-dot net namespace";
+        testManifestItem!.RequiredNamespace = "Some non-dot net namespace";
         expect(testManifestItem.hashCode, isNot(reference.hashCode));
       });
     });

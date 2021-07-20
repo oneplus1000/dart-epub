@@ -9,7 +9,7 @@ main() async {
     ..FileAs = "Large"
     ..Role = "Creator";
 
-  EpubMetadataContributor testMetadataContributor;
+  EpubMetadataContributor? testMetadataContributor;
   setUp(() async {
     testMetadataContributor = new EpubMetadataContributor()
       ..Contributor = reference.Contributor
@@ -27,15 +27,15 @@ main() async {
       });
 
       test("is false when Contributor changes", () async {
-        testMetadataContributor.Contributor = "NotOrthros";
+        testMetadataContributor!.Contributor = "NotOrthros";
         expect(testMetadataContributor, isNot(reference));
       });
       test("is false when FileAs changes", () async {
-        testMetadataContributor.FileAs = "Small";
+        testMetadataContributor!.FileAs = "Small";
         expect(testMetadataContributor, isNot(reference));
       });
       test("is false when Role changes", () async {
-        testMetadataContributor.Role = "Copier";
+        testMetadataContributor!.Role = "Copier";
         expect(testMetadataContributor, isNot(reference));
       });
     });
@@ -46,15 +46,15 @@ main() async {
       });
 
       test("is false when Contributor changes", () async {
-        testMetadataContributor.Contributor = "NotOrthros";
+        testMetadataContributor!.Contributor = "NotOrthros";
         expect(testMetadataContributor.hashCode, isNot(reference.hashCode));
       });
       test("is false when FileAs changes", () async {
-        testMetadataContributor.FileAs = "Small";
+        testMetadataContributor!.FileAs = "Small";
         expect(testMetadataContributor.hashCode, isNot(reference.hashCode));
       });
       test("is false when Role changes", () async {
-        testMetadataContributor.Role = "Copier";
+        testMetadataContributor!.Role = "Copier";
         expect(testMetadataContributor.hashCode, isNot(reference.hashCode));
       });
     });

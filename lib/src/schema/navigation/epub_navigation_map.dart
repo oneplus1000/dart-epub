@@ -3,7 +3,7 @@ import 'package:quiver/collection.dart' as collections;
 import 'epub_navigation_point.dart';
 
 class EpubNavigationMap {
-  List<EpubNavigationPoint> Points;
+  List<EpubNavigationPoint>? Points;
 
   @override
   int get hashCode => Points.hashCode;

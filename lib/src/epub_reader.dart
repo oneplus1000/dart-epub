@@ -34,12 +34,12 @@ class EpubReader {
 
     EpubBookRef bookRef = new EpubBookRef(epubArchive);
     bookRef.Schema = await SchemaReader.readSchema(epubArchive);
-    bookRef.Title = bookRef.Schema.Package.Metadata.Titles
+    bookRef.Title = bookRef.Schema!.Package!.Metadata!.Titles!
         .firstWhere((String name) => true, orElse: () => "");
-    bookRef.AuthorList = bookRef.Schema.Package.Metadata.Creators
+    bookRef.AuthorList = bookRef.Schema!.Package!.Metadata!.Creators!
         .map((EpubMetadataCreator creator) => creator.Creator)
         .toList();
-    bookRef.Author = bookRef.AuthorList.join(", ");
+    bookRef.Author = bookRef.AuthorList!.join(", ");
     bookRef.Content = await ContentReader.parseContentMap(bookRef);
     return bookRef;
   }
@@ -47,7 +47,7 @@ class EpubReader {
   /// Opens the book asynchronously and reads all of its content into the memory. Does not hold the handle to the EPUB file.
   static Future<EpubBook> readBook(
     List<int> bytes, {
-    IBookDecrypt bookDecrypt,
+    IBookDecrypt? bookDecrypt,
   }) async {
     EpubBook result = new EpubBook();
     EpubBookRef epubBookRef = await openBook(bytes);
@@ -55,8 +55,8 @@ class EpubReader {
     result.Title = epubBookRef.Title;
     result.AuthorList = epubBookRef.AuthorList;
     result.Author = epubBookRef.Author;
-    result.Content =
-        await readContent(epubBookRef.Content, bookDecrypt, epubBookRef.Schema);
+    result.Content = await readContent(
+        epubBookRef.Content!, bookDecrypt, epubBookRef.Schema);
     result.CoverImage = await epubBookRef.readCover();
     List<EpubChapterRef> chapterRefs = await epubBookRef.getChapters();
     result.Chapters = await readChapters(chapterRefs, bookDecrypt);
@@ -67,7 +67,7 @@ class EpubReader {
   /// Opens the book asynchronously and reads some of its content into the memory.
   static Future<EpubBookLight> readBookLight(
     List<int> bytes, {
-    IBookDecrypt bookDecrypt,
+    IBookDecrypt? bookDecrypt,
   }) async {
     EpubBookLight result = new EpubBookLight();
     EpubBookRef epubBookRef = await openBook(bytes);
@@ -77,7 +77,7 @@ class EpubReader {
     result.AuthorList = epubBookRef.AuthorList;
     result.Author = epubBookRef.Author;
     result.Content = await readContentLight(
-        epubBookRef.Content, bookDecrypt, epubBookRef.Schema);
+        epubBookRef.Content!, bookDecrypt, epubBookRef.Schema);
     //result.CoverImage = await epubBookRef.readCover();  //not load for reduce memory use
     List<EpubChapterRef> chapterRefs = await epubBookRef.getChapters();
     result.Chapters = await readChapters(chapterRefs, bookDecrypt);
@@ -87,36 +87,36 @@ class EpubReader {
 
   static Future<EpubContentLight> readContentLight(
     EpubContentRef contentRef,
-    IBookDecrypt bookDecrypt,
-    EpubSchema schema,
+    IBookDecrypt? bookDecrypt,
+    EpubSchema? schema,
   ) async {
     EpubContentLight result = new EpubContentLight();
     result.Html =
-        await readTextContentFiles(contentRef.Html, bookDecrypt, schema);
+        await readTextContentFiles(contentRef.Html!, bookDecrypt, schema);
     result.Css = await readTextContentFiles(
-        contentRef.Css, null, null); //css ไม่เข้ารหัส
-    result.Images = await readByteContentFilesLight(contentRef.Images);
-    result.Fonts = await readByteContentFilesLight(contentRef.Fonts);
-    result.AllFiles = new Map<String, EpubContentFile>();
+        contentRef.Css!, null, null); //css ไม่เข้ารหัส
+    result.Images = await readByteContentFilesLight(contentRef.Images!);
+    result.Fonts = await readByteContentFilesLight(contentRef.Fonts!);
+    result.AllFiles = new Map<String, EpubContentFile?>();
 
-    result.Html.forEach((String key, EpubTextContentFile value) {
-      result.AllFiles[key] = value;
+    result.Html!.forEach((String key, EpubTextContentFile? value) {
+      result.AllFiles![key] = value;
     });
-    result.Css.forEach((String key, EpubTextContentFile value) {
-      result.AllFiles[key] = value;
-    });
-
-    result.Images.forEach((String key, EpubByteContentFileLight value) {
-      result.AllFiles[key] = value;
-    });
-    result.Fonts.forEach((String key, EpubByteContentFileLight value) {
-      result.AllFiles[key] = value;
+    result.Css!.forEach((String key, EpubTextContentFile? value) {
+      result.AllFiles![key] = value;
     });
 
-    await Future.forEach(contentRef.AllFiles.keys, (key) async {
-      if (!result.AllFiles.containsKey(key)) {
-        result.AllFiles[key] =
-            await readByteContentFile(contentRef.AllFiles[key]);
+    result.Images!.forEach((String key, EpubByteContentFileLight value) {
+      result.AllFiles![key] = value;
+    });
+    result.Fonts!.forEach((String key, EpubByteContentFileLight value) {
+      result.AllFiles![key] = value;
+    });
+
+    await Future.forEach(contentRef.AllFiles!.keys, (dynamic key) async {
+      if (!result.AllFiles!.containsKey(key)) {
+        result.AllFiles![key] =
+            await readByteContentFile(contentRef.AllFiles![key]!);
       }
     });
 
@@ -125,36 +125,36 @@ class EpubReader {
 
   static Future<EpubContent> readContent(
     EpubContentRef contentRef,
-    IBookDecrypt bookDecrypt,
-    EpubSchema schema,
+    IBookDecrypt? bookDecrypt,
+    EpubSchema? schema,
   ) async {
     EpubContent result = new EpubContent();
     result.Html =
-        await readTextContentFiles(contentRef.Html, bookDecrypt, schema);
+        await readTextContentFiles(contentRef.Html!, bookDecrypt, schema);
     result.Css = await readTextContentFiles(
-        contentRef.Css, null, null); //css ไม่เข้ารหัส
-    result.Images = await readByteContentFiles(contentRef.Images);
-    result.Fonts = await readByteContentFiles(contentRef.Fonts);
-    result.AllFiles = new Map<String, EpubContentFile>();
+        contentRef.Css!, null, null); //css ไม่เข้ารหัส
+    result.Images = await readByteContentFiles(contentRef.Images!);
+    result.Fonts = await readByteContentFiles(contentRef.Fonts!);
+    result.AllFiles = new Map<String, EpubContentFile?>();
 
-    result.Html.forEach((String key, EpubTextContentFile value) {
-      result.AllFiles[key] = value;
+    result.Html!.forEach((String key, EpubTextContentFile? value) {
+      result.AllFiles![key] = value;
     });
-    result.Css.forEach((String key, EpubTextContentFile value) {
-      result.AllFiles[key] = value;
-    });
-
-    result.Images.forEach((String key, EpubByteContentFile value) {
-      result.AllFiles[key] = value;
-    });
-    result.Fonts.forEach((String key, EpubByteContentFile value) {
-      result.AllFiles[key] = value;
+    result.Css!.forEach((String key, EpubTextContentFile? value) {
+      result.AllFiles![key] = value;
     });
 
-    await Future.forEach(contentRef.AllFiles.keys, (key) async {
-      if (!result.AllFiles.containsKey(key)) {
-        result.AllFiles[key] =
-            await readByteContentFile(contentRef.AllFiles[key]);
+    result.Images!.forEach((String key, EpubByteContentFile? value) {
+      result.AllFiles![key] = value;
+    });
+    result.Fonts!.forEach((String key, EpubByteContentFile? value) {
+      result.AllFiles![key] = value;
+    });
+
+    await Future.forEach(contentRef.AllFiles!.keys, (dynamic key) async {
+      if (!result.AllFiles!.containsKey(key)) {
+        result.AllFiles![key] =
+            await readByteContentFile(contentRef.AllFiles![key]!);
       }
     });
 
@@ -162,8 +162,8 @@ class EpubReader {
   }
 
   static bool _compareFilenameWithIdRef(
-    String filename,
-    String idRef,
+    String? filename,
+    String? idRef,
     EpubSchema schema,
   ) {
     if (filename == null || idRef == null) {
@@ -184,7 +184,7 @@ class EpubReader {
     }
 
     //ถ้ายังไม่ตรงกันเข้าไปค้นใน Manifest
-    for (var item in schema.Package.Manifest.Items) {
+    for (var item in schema.Package!.Manifest!.Items!) {
       if (item.Href == filename && item.Id == idRef) {
         return true;
       }
@@ -193,16 +193,16 @@ class EpubReader {
     return false;
   }
 
-  static Future<Map<String, EpubTextContentFile>> readTextContentFiles(
-    Map<String, EpubTextContentFileRef> textContentFileRefs,
-    IBookDecrypt bookDecrypt,
-    EpubSchema schema,
+  static Future<Map<String, EpubTextContentFile?>> readTextContentFiles(
+    Map<String, EpubTextContentFileRef?> textContentFileRefs,
+    IBookDecrypt? bookDecrypt,
+    EpubSchema? schema,
   ) async {
-    Map<String, EpubTextContentFile> result =
-        new Map<String, EpubTextContentFile>();
+    Map<String, EpubTextContentFile?> result =
+        new Map<String, EpubTextContentFile?>();
 
-    await Future.forEach(textContentFileRefs.keys, (key) async {
-      EpubContentFileRef value = textContentFileRefs[key];
+    await Future.forEach(textContentFileRefs.keys, (dynamic key) async {
+      EpubContentFileRef value = textContentFileRefs[key]!;
       EpubTextContentFile textContentFile = new EpubTextContentFile();
       textContentFile.FileName = value.FileName;
       textContentFile.ContentType = value.ContentType;
@@ -211,7 +211,7 @@ class EpubReader {
       try {
         bool inSpine = false;
         if (bookDecrypt != null && schema != null) {
-          for (var item in schema.Package.Spine.Items) {
+          for (var item in schema.Package!.Spine!.Items!) {
             if (_compareFilenameWithIdRef(value.FileName, item.IdRef, schema) ==
                 true) {
               inSpine = true;
@@ -237,7 +237,7 @@ class EpubReader {
         );
         */
         throw Exception("ไฟล์ $key มีปัญหา $err");
-        print('ERR:' + value.FileName + ' $err\n');
+        print('ERR:' + value.FileName! + ' $err\n');
         textContentFile.Content = 'ไฟล์มีปัญหากรุณาติดต่อ MangaQube';
       }
       result[key] = textContentFile;
@@ -247,12 +247,12 @@ class EpubReader {
 
   static Future<Map<String, EpubByteContentFileLight>>
       readByteContentFilesLight(
-    Map<String, EpubByteContentFileRef> byteContentFileRefs,
+    Map<String, EpubByteContentFileRef?> byteContentFileRefs,
   ) async {
     Map<String, EpubByteContentFileLight> result =
         new Map<String, EpubByteContentFileLight>();
-    await Future.forEach(byteContentFileRefs.keys, (key) async {
-      result[key] = await readByteContentFileLight(byteContentFileRefs[key]);
+    await Future.forEach(byteContentFileRefs.keys, (dynamic key) async {
+      result[key] = await readByteContentFileLight(byteContentFileRefs[key]!);
     });
     return result;
   }
@@ -270,12 +270,12 @@ class EpubReader {
     return result;
   }
 
-  static Future<Map<String, EpubByteContentFile>> readByteContentFiles(
-      Map<String, EpubByteContentFileRef> byteContentFileRefs) async {
-    Map<String, EpubByteContentFile> result =
-        new Map<String, EpubByteContentFile>();
-    await Future.forEach(byteContentFileRefs.keys, (key) async {
-      result[key] = await readByteContentFile(byteContentFileRefs[key]);
+  static Future<Map<String, EpubByteContentFile?>> readByteContentFiles(
+      Map<String, EpubByteContentFileRef?> byteContentFileRefs) async {
+    Map<String, EpubByteContentFile?> result =
+        new Map<String, EpubByteContentFile?>();
+    await Future.forEach(byteContentFileRefs.keys, (dynamic key) async {
+      result[key] = await readByteContentFile(byteContentFileRefs[key]!);
     });
     return result;
   }
@@ -294,9 +294,9 @@ class EpubReader {
 
   static Future<List<EpubChapter>> readChapters(
     List<EpubChapterRef> chapterRefs,
-    IBookDecrypt bookDecrypt,
+    IBookDecrypt? bookDecrypt,
   ) async {
-    List<EpubChapter> result = new List<EpubChapter>();
+    List<EpubChapter> result = [];
     await Future.forEach(chapterRefs, (EpubChapterRef chapterRef) async {
       EpubChapter chapter = new EpubChapter();
       chapter.Title = chapterRef.Title;
@@ -305,7 +305,7 @@ class EpubReader {
       chapter.HtmlContent =
           await chapterRef.readHtmlContent(bookDecrypt: bookDecrypt);
       chapter.SubChapters =
-          await readChapters(chapterRef.SubChapters, bookDecrypt);
+          await readChapters(chapterRef.SubChapters!, bookDecrypt);
       result.add(chapter);
     });
     return result;

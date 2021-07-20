@@ -23,7 +23,7 @@ class EpubPackageWriter {
       EpubMetadataWriter.writeMetadata(
           builder, package.Metadata, package.Version);
       EpubManifestWriter.writeManifest(builder, package.Manifest);
-      EpubSpineWriter.writeSpine(builder, package.Spine);
+      EpubSpineWriter.writeSpine(builder, package.Spine!);
       EpubGuideWriter.writeGuide(builder, package.Guide);
     });
 

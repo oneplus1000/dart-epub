@@ -9,7 +9,7 @@ main() async {
     ..Identifier = "Identifier"
     ..Scheme = "A plot";
 
-  EpubMetadataIdentifier testMetadataIdentifier;
+  EpubMetadataIdentifier? testMetadataIdentifier;
   setUp(() async {
     testMetadataIdentifier = new EpubMetadataIdentifier()
       ..Id = reference.Id
@@ -27,15 +27,15 @@ main() async {
       });
 
       test("is false when Id changes", () async {
-        testMetadataIdentifier.Id = "A different ID";
+        testMetadataIdentifier!.Id = "A different ID";
         expect(testMetadataIdentifier, isNot(reference));
       });
       test("is false when Identifier changes", () async {
-        testMetadataIdentifier.Identifier = "A different identifier";
+        testMetadataIdentifier!.Identifier = "A different identifier";
         expect(testMetadataIdentifier, isNot(reference));
       });
       test("is false when Scheme changes", () async {
-        testMetadataIdentifier.Scheme = "A strange scheme";
+        testMetadataIdentifier!.Scheme = "A strange scheme";
         expect(testMetadataIdentifier, isNot(reference));
       });
     });
@@ -46,15 +46,15 @@ main() async {
       });
 
       test("is false when Id changes", () async {
-        testMetadataIdentifier.Id = "A different Id";
+        testMetadataIdentifier!.Id = "A different Id";
         expect(testMetadataIdentifier.hashCode, isNot(reference.hashCode));
       });
       test("is false when Identifier changes", () async {
-        testMetadataIdentifier.Identifier = "A different identifier";
+        testMetadataIdentifier!.Identifier = "A different identifier";
         expect(testMetadataIdentifier.hashCode, isNot(reference.hashCode));
       });
       test("is false when Scheme changes", () async {
-        testMetadataIdentifier.Scheme = "A strange scheme";
+        testMetadataIdentifier!.Scheme = "A strange scheme";
         expect(testMetadataIdentifier.hashCode, isNot(reference.hashCode));
       });
     });

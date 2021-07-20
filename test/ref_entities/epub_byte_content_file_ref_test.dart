@@ -15,14 +15,14 @@ main() async {
     ..ContentType = EpubContentType.OTHER
     ..FileName = "orthrosFile";
 
-  EpubByteContentFileRef testFileRef;
+  EpubByteContentFileRef? testFileRef;
 
   setUp(() async {
     Archive arch2 = new Archive();
     EpubBookRef ref2 = new EpubBookRef(arch2);
 
     testFileRef = new EpubByteContentFileRef(ref2);
-    testFileRef
+    testFileRef!
       ..ContentMimeType = reference.ContentMimeType
       ..ContentType = reference.ContentType
       ..FileName = reference.FileName;
@@ -39,17 +39,17 @@ main() async {
       });
 
       test("is false when ContentMimeType changes", () async {
-        testFileRef.ContentMimeType = "application/different";
+        testFileRef!.ContentMimeType = "application/different";
         expect(testFileRef, isNot(reference));
       });
 
       test("is false when ContentType changes", () async {
-        testFileRef.ContentType = EpubContentType.CSS;
+        testFileRef!.ContentType = EpubContentType.CSS;
         expect(testFileRef, isNot(reference));
       });
 
       test("is false when FileName changes", () async {
-        testFileRef.FileName = "a_different_file_name.txt";
+        testFileRef!.FileName = "a_different_file_name.txt";
         expect(testFileRef, isNot(reference));
       });
     });
@@ -60,17 +60,17 @@ main() async {
       });
 
       test('changes when ContentMimeType changes', () async {
-        testFileRef.ContentMimeType = "application/orthros";
+        testFileRef!.ContentMimeType = "application/orthros";
         expect(testFileRef.hashCode, isNot(reference.hashCode));
       });
 
       test('changes when ContentType changes', () async {
-        testFileRef.ContentType = EpubContentType.CSS;
+        testFileRef!.ContentType = EpubContentType.CSS;
         expect(testFileRef.hashCode, isNot(reference.hashCode));
       });
 
       test('changes when FileName changes', () async {
-        testFileRef.FileName = "a_different_file_name";
+        testFileRef!.FileName = "a_different_file_name";
         expect(testFileRef.hashCode, isNot(reference.hashCode));
       });
     });

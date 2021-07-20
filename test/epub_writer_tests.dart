@@ -20,7 +20,7 @@ main() async {
   test("Book Round Trip", () async {
     EpubBook book = await EpubReader.readBook(bytes);
 
-    var written = await EpubWriter.writeBook(book);
+    var written = await EpubWriter.writeBook(book)!;
     var bookRoundTrip = await EpubReader.readBook(written);
 
     expect(bookRoundTrip, equals(book));

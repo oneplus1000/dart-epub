@@ -9,7 +9,7 @@ main() async {
     ..FileAs = "Large"
     ..Role = "Creator";
 
-  EpubMetadataCreator testMetadataCreator;
+  EpubMetadataCreator? testMetadataCreator;
   setUp(() async {
     testMetadataCreator = new EpubMetadataCreator()
       ..Creator = reference.Creator
@@ -27,15 +27,15 @@ main() async {
       });
 
       test("is false when Creator changes", () async {
-        testMetadataCreator.Creator = "NotOrthros";
+        testMetadataCreator!.Creator = "NotOrthros";
         expect(testMetadataCreator, isNot(reference));
       });
       test("is false when FileAs changes", () async {
-        testMetadataCreator.FileAs = "Small";
+        testMetadataCreator!.FileAs = "Small";
         expect(testMetadataCreator, isNot(reference));
       });
       test("is false when Role changes", () async {
-        testMetadataCreator.Role = "Copier";
+        testMetadataCreator!.Role = "Copier";
         expect(testMetadataCreator, isNot(reference));
       });
     });
@@ -46,15 +46,15 @@ main() async {
       });
 
       test("is false when Creator changes", () async {
-        testMetadataCreator.Creator = "NotOrthros";
+        testMetadataCreator!.Creator = "NotOrthros";
         expect(testMetadataCreator.hashCode, isNot(reference.hashCode));
       });
       test("is false when FileAs changes", () async {
-        testMetadataCreator.FileAs = "Small";
+        testMetadataCreator!.FileAs = "Small";
         expect(testMetadataCreator.hashCode, isNot(reference.hashCode));
       });
       test("is false when Role changes", () async {
-        testMetadataCreator.Role = "Copier";
+        testMetadataCreator!.Role = "Copier";
         expect(testMetadataCreator.hashCode, isNot(reference.hashCode));
       });
     });

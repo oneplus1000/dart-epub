@@ -85,7 +85,7 @@ class RandomString {
 
 class RandomDataGenerator {
   final Random rng;
-  RandomString _randomString;
+  late RandomString _randomString;
   final int _length;
 
   RandomDataGenerator(this.rng, this._length) {
@@ -103,9 +103,8 @@ class RandomDataGenerator {
       ..Id = randomString()
       ..Content = randomEpubNavigationContent()
       ..Class = randomString()
-      ..ChildNavigationPoints = depth > 0
-          ? [randomEpubNavigationPoint(depth - 1)]
-          : new List<EpubNavigationPoint>();
+      ..ChildNavigationPoints =
+          depth > 0 ? [randomEpubNavigationPoint(depth - 1)] : [];
   }
 
   EpubNavigationContent randomEpubNavigationContent() {

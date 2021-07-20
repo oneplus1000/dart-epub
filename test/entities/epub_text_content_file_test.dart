@@ -10,10 +10,10 @@ main() async {
     ..ContentMimeType = "application/test"
     ..ContentType = EpubContentType.OTHER
     ..FileName = "orthrosFile";
-  EpubTextContentFile testFile;
+  EpubTextContentFile? testFile;
   setUp(() async {
     testFile = new EpubTextContentFile();
-    testFile
+    testFile!
       ..Content = reference.Content
       ..ContentMimeType = reference.ContentMimeType
       ..ContentType = reference.ContentType
@@ -29,22 +29,22 @@ main() async {
       });
 
       test("is false when Content changes", () async {
-        testFile.Content = "Goodbye";
+        testFile!.Content = "Goodbye";
         expect(testFile, isNot(reference));
       });
 
       test("is false when ContentMimeType changes", () async {
-        testFile.ContentMimeType = "application/different";
+        testFile!.ContentMimeType = "application/different";
         expect(testFile, isNot(reference));
       });
 
       test("is false when ContentType changes", () async {
-        testFile.ContentType = EpubContentType.CSS;
+        testFile!.ContentType = EpubContentType.CSS;
         expect(testFile, isNot(reference));
       });
 
       test("is false when FileName changes", () async {
-        testFile.FileName = "a_different_file_name.txt";
+        testFile!.FileName = "a_different_file_name.txt";
         expect(testFile, isNot(reference));
       });
     });
@@ -54,22 +54,22 @@ main() async {
       });
 
       test('changes when Content changes', () async {
-        testFile.Content = "Goodbye";
+        testFile!.Content = "Goodbye";
         expect(testFile.hashCode, isNot(reference.hashCode));
       });
 
       test('changes when ContentMimeType changes', () async {
-        testFile.ContentMimeType = "application/orthros";
+        testFile!.ContentMimeType = "application/orthros";
         expect(testFile.hashCode, isNot(reference.hashCode));
       });
 
       test('changes when ContentType changes', () async {
-        testFile.ContentType = EpubContentType.CSS;
+        testFile!.ContentType = EpubContentType.CSS;
         expect(testFile.hashCode, isNot(reference.hashCode));
       });
 
       test('changes when FileName changes', () async {
-        testFile.FileName = "a_different_file_name";
+        testFile!.FileName = "a_different_file_name";
         expect(testFile.hashCode, isNot(reference.hashCode));
       });
     });

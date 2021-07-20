@@ -23,26 +23,26 @@ class EpubWriter {
         _container_file.length, utf8.encode(_container_file)));
 
     // Add all content to the archive
-    book.Content.AllFiles.forEach((name, file) {
-      List<int> content;
+    book.Content!.AllFiles!.forEach((name, file) {
+      List<int>? content;
 
       if (file is EpubByteContentFile) {
         content = file.Content;
       } else if (file is EpubTextContentFile) {
-        content = utf8.encode(file.Content);
+        content = utf8.encode(file.Content!);
       }
 
       arch.addFile(new ArchiveFile(
-          ZipPathUtils.combine(book.Schema.ContentDirectoryPath, name),
-          content.length,
+          ZipPathUtils.combine(book.Schema!.ContentDirectoryPath, name)!,
+          content!.length,
           content));
     });
 
     // Generate the content.opf file and add it to the Archive
-    var contentopf = EpubPackageWriter.writeContent(book.Schema.Package);
+    var contentopf = EpubPackageWriter.writeContent(book.Schema!.Package!);
 
     arch.addFile(new ArchiveFile(
-        ZipPathUtils.combine(book.Schema.ContentDirectoryPath, "content.opf"),
+        ZipPathUtils.combine(book.Schema!.ContentDirectoryPath, "content.opf")!,
         contentopf.length,
         utf8.encode(contentopf)));
 
@@ -50,7 +50,7 @@ class EpubWriter {
   }
 
   // Serializes the EpubBook into a byte array
-  static List<int> writeBook(EpubBook book) {
+  static List<int>? writeBook(EpubBook book) {
     var arch = _createArchive(book);
 
     return new ZipEncoder().encode(arch);

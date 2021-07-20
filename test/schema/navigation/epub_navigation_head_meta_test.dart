@@ -11,7 +11,7 @@ main() async {
   final generator = new RandomDataGenerator(new Random(7898), 10);
   final EpubNavigationHeadMeta reference = generator.randomNavigationHeadMeta();
 
-  EpubNavigationHeadMeta testNavigationDocTitle;
+  EpubNavigationHeadMeta? testNavigationDocTitle;
   setUp(() async {
     testNavigationDocTitle = new EpubNavigationHeadMeta()
       ..Content = reference.Content
@@ -29,15 +29,15 @@ main() async {
       });
 
       test("is false when Content changes", () async {
-        testNavigationDocTitle.Content = generator.randomString();
+        testNavigationDocTitle!.Content = generator.randomString();
         expect(testNavigationDocTitle, isNot(reference));
       });
       test("is false when Name changes", () async {
-        testNavigationDocTitle.Name = generator.randomString();
+        testNavigationDocTitle!.Name = generator.randomString();
         expect(testNavigationDocTitle, isNot(reference));
       });
       test("is false when Scheme changes", () async {
-        testNavigationDocTitle.Scheme = generator.randomString();
+        testNavigationDocTitle!.Scheme = generator.randomString();
         expect(testNavigationDocTitle, isNot(reference));
       });
     });
@@ -48,15 +48,15 @@ main() async {
       });
 
       test("is false when Content changes", () async {
-        testNavigationDocTitle.Content = generator.randomString();
+        testNavigationDocTitle!.Content = generator.randomString();
         expect(testNavigationDocTitle.hashCode, isNot(reference.hashCode));
       });
       test("is false when Name changes", () async {
-        testNavigationDocTitle.Name = generator.randomString();
+        testNavigationDocTitle!.Name = generator.randomString();
         expect(testNavigationDocTitle.hashCode, isNot(reference.hashCode));
       });
       test("is false when Scheme changes", () async {
-        testNavigationDocTitle.Scheme = generator.randomString();
+        testNavigationDocTitle!.Scheme = generator.randomString();
         expect(testNavigationDocTitle.hashCode, isNot(reference.hashCode));
       });
     });

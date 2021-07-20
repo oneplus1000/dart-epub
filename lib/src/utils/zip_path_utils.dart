@@ -7,10 +7,10 @@ class ZipPathUtils {
       return filePath.substring(0, lastSlashIndex);
   }
 
-  static String combine(String directory, String fileName) {
+  static String? combine(String? directory, String? fileName) {
     if (directory == null || directory == "")
       return fileName;
     else
-      return directory + "/" + fileName;
+      return directory + "/" + fileName!;
   }
 }

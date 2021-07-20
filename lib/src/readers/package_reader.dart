@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:archive/archive.dart';
 //import 'package:dart2_constant/convert.dart' as convert;
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:xml/xml.dart' as xml;
 
 import '../schema/opf/epub_guide.dart';
@@ -45,11 +46,11 @@ class PackageReader {
               break;
           }
         });
-        if (guideReference.Type == null || guideReference.Type.isEmpty)
+        if (guideReference.Type == null || guideReference.Type!.isEmpty)
           throw new Exception("Incorrect EPUB guide: item type is missing");
-        if (guideReference.Href == null || guideReference.Href.isEmpty)
+        if (guideReference.Href == null || guideReference.Href!.isEmpty)
           throw new Exception("Incorrect EPUB guide: item href is missing");
-        result.Items.add(guideReference);
+        result.Items!.add(guideReference);
       }
     });
     return result;
@@ -92,21 +93,21 @@ class PackageReader {
           }
         });
 
-        if (manifestItem.Id == null || manifestItem.Id.isEmpty)
+        if (manifestItem.Id == null || manifestItem.Id!.isEmpty)
           throw new Exception("Incorrect EPUB manifest: item ID is missing");
-        if (manifestItem.Href == null || manifestItem.Href.isEmpty)
+        if (manifestItem.Href == null || manifestItem.Href!.isEmpty)
           throw new Exception("Incorrect EPUB manifest: item href is missing");
-        if (manifestItem.MediaType == null || manifestItem.MediaType.isEmpty)
+        if (manifestItem.MediaType == null || manifestItem.MediaType!.isEmpty)
           throw new Exception(
               "Incorrect EPUB manifest: item media type is missing");
-        result.Items.add(manifestItem);
+        result.Items!.add(manifestItem);
       }
     });
     return result;
   }
 
   static EpubMetadata readMetadata(
-      xml.XmlElement metadataNode, EpubVersion epubVersion) {
+      xml.XmlElement metadataNode, EpubVersion? epubVersion) {
     EpubMetadata result = new EpubMetadata();
     result.Titles = <String>[];
     result.Creators = <EpubMetadataCreator>[];
@@ -130,63 +131,63 @@ class PackageReader {
       String innerText = metadataItemNode.text;
       switch (metadataItemNode.name.local.toLowerCase()) {
         case "title":
-          result.Titles.add(innerText);
+          result.Titles!.add(innerText);
           break;
         case "creator":
           EpubMetadataCreator creator = readMetadataCreator(metadataItemNode);
-          result.Creators.add(creator);
+          result.Creators!.add(creator);
           break;
         case "subject":
-          result.Subjects.add(innerText);
+          result.Subjects!.add(innerText);
           break;
         case "description":
           result.Description = innerText;
           break;
         case "publisher":
-          result.Publishers.add(innerText);
+          result.Publishers!.add(innerText);
           break;
         case "contributor":
           EpubMetadataContributor contributor =
               readMetadataContributor(metadataItemNode);
-          result.Contributors.add(contributor);
+          result.Contributors!.add(contributor);
           break;
         case "date":
           EpubMetadataDate date = readMetadataDate(metadataItemNode);
-          result.Dates.add(date);
+          result.Dates!.add(date);
           break;
         case "type":
-          result.Types.add(innerText);
+          result.Types!.add(innerText);
           break;
         case "format":
-          result.Formats.add(innerText);
+          result.Formats!.add(innerText);
           break;
         case "identifier":
           EpubMetadataIdentifier identifier =
               readMetadataIdentifier(metadataItemNode);
-          result.Identifiers.add(identifier);
+          result.Identifiers!.add(identifier);
           break;
         case "source":
-          result.Sources.add(innerText);
+          result.Sources!.add(innerText);
           break;
         case "language":
-          result.Languages.add(innerText);
+          result.Languages!.add(innerText);
           break;
         case "relation":
-          result.Relations.add(innerText);
+          result.Relations!.add(innerText);
           break;
         case "coverage":
-          result.Coverages.add(innerText);
+          result.Coverages!.add(innerText);
           break;
         case "rights":
-          result.Rights.add(innerText);
+          result.Rights!.add(innerText);
           break;
         case "meta":
           if (epubVersion == EpubVersion.Epub2) {
             EpubMetadataMeta meta = readMetadataMetaVersion2(metadataItemNode);
-            result.MetaItems.add(meta);
+            result.MetaItems!.add(meta);
           } else if (epubVersion == EpubVersion.Epub3) {
             EpubMetadataMeta meta = readMetadataMetaVersion3(metadataItemNode);
-            result.MetaItems.add(meta);
+            result.MetaItems!.add(meta);
           }
           break;
       }
@@ -234,7 +235,7 @@ class PackageReader {
 
   static EpubMetadataDate readMetadataDate(xml.XmlElement metadataDateNode) {
     EpubMetadataDate result = new EpubMetadataDate();
-    String eventAttribute = metadataDateNode.getAttribute("event",
+    String? eventAttribute = metadataDateNode.getAttribute("event",
         namespace: metadataDateNode.name.namespaceUri);
     if (eventAttribute != null && !eventAttribute.isEmpty)
       result.Event = eventAttribute;
@@ -306,9 +307,8 @@ class PackageReader {
 
   static Future<EpubPackage> readPackage(
       Archive epubArchive, String rootFilePath) async {
-    ArchiveFile rootFileEntry = epubArchive.files.firstWhere(
-        (ArchiveFile testfile) => testfile.name == rootFilePath,
-        orElse: () => null);
+    ArchiveFile? rootFileEntry = epubArchive.files.firstWhereOrNull(
+        (ArchiveFile testfile) => testfile.name == rootFilePath);
     if (rootFileEntry == null)
       throw new Exception(
           "EPUB parsing error: root file not found in archive.");
@@ -319,7 +319,7 @@ class PackageReader {
         .findElements("package", namespace: opfNamespace)
         .firstWhere((xml.XmlElement elem) => elem != null);
     EpubPackage result = new EpubPackage();
-    String epubVersionValue = packageNode.getAttribute("version");
+    String? epubVersionValue = packageNode.getAttribute("version");
     if (epubVersionValue == "2.0")
       result.Version = EpubVersion.Epub2;
     else if (epubVersionValue == "3.0")
@@ -351,9 +351,9 @@ class PackageReader {
           "EPUB parsing error: spine not found in the package.");
     EpubSpine spine = readSpine(spineNode);
     result.Spine = spine;
-    xml.XmlElement guideNode = packageNode
+    xml.XmlElement? guideNode = packageNode
         .findElements("guide", namespace: opfNamespace)
-        .firstWhere((xml.XmlElement elem) => elem != null, orElse: () => null);
+        .firstWhereOrNull((xml.XmlElement elem) => elem != null);
     if (guideNode != null) {
       EpubGuide guide = readGuide(guideNode);
       result.Guide = guide;
@@ -364,7 +364,7 @@ class PackageReader {
   static EpubSpine readSpine(xml.XmlElement spineNode) {
     EpubSpine result = new EpubSpine();
     result.Items = <EpubSpineItemRef>[];
-    String tocAttribute = spineNode.getAttribute("toc");
+    String? tocAttribute = spineNode.getAttribute("toc");
     if (tocAttribute == null || tocAttribute.isEmpty)
       throw new Exception("Incorrect EPUB spine: TOC is missing");
     result.TableOfContents = tocAttribute;
@@ -374,14 +374,14 @@ class PackageReader {
         .forEach((xml.XmlElement spineItemNode) {
       if (spineItemNode.name.local.toLowerCase() == "itemref") {
         EpubSpineItemRef spineItemRef = new EpubSpineItemRef();
-        String idRefAttribute = spineItemNode.getAttribute("idref");
+        String? idRefAttribute = spineItemNode.getAttribute("idref");
         if (idRefAttribute == null || idRefAttribute.isEmpty)
           throw new Exception("Incorrect EPUB spine: item ID ref is missing");
         spineItemRef.IdRef = idRefAttribute;
-        String linearAttribute = spineItemNode.getAttribute("linear");
+        String? linearAttribute = spineItemNode.getAttribute("linear");
         spineItemRef.IsLinear =
             linearAttribute == null || (linearAttribute.toLowerCase() == "no");
-        result.Items.add(spineItemRef);
+        result.Items!.add(spineItemRef);
       }
     });
     return result;

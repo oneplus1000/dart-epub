@@ -6,33 +6,33 @@ import 'epub_content_file.dart';
 import 'epub_text_content_file.dart';
 
 class EpubContentLight {
-  Map<String, EpubTextContentFile> Html;
-  Map<String, EpubTextContentFile> Css;
-  Map<String, EpubByteContentFileLight> Images;
-  Map<String, EpubByteContentFileLight> Fonts;
-  Map<String, EpubContentFile> AllFiles;
+  Map<String, EpubTextContentFile?>? Html;
+  Map<String, EpubTextContentFile?>? Css;
+  Map<String, EpubByteContentFileLight>? Images;
+  Map<String, EpubByteContentFileLight>? Fonts;
+  Map<String, EpubContentFile?>? AllFiles;
 
   EpubContent() {
     Html = new Map<String, EpubTextContentFile>();
     Css = new Map<String, EpubTextContentFile>();
     Images = new Map<String, EpubByteContentFileLight>();
     Fonts = new Map<String, EpubByteContentFileLight>();
-    AllFiles = new Map<String, EpubContentFile>();
+    AllFiles = new Map<String, EpubContentFile?>();
   }
 
   @override
   int get hashCode {
     var objects = []
-      ..addAll(Html.keys.map((key) => key.hashCode))
-      ..addAll(Html.values.map((value) => value.hashCode))
-      ..addAll(Css.keys.map((key) => key.hashCode))
-      ..addAll(Css.values.map((value) => value.hashCode))
-      ..addAll(Images.keys.map((key) => key.hashCode))
-      ..addAll(Images.values.map((value) => value.hashCode))
-      ..addAll(Fonts.keys.map((key) => key.hashCode))
-      ..addAll(Fonts.values.map((value) => value.hashCode))
-      ..addAll(AllFiles.keys.map((key) => key.hashCode))
-      ..addAll(AllFiles.values.map((value) => value.hashCode));
+      ..addAll(Html!.keys.map((key) => key.hashCode))
+      ..addAll(Html!.values.map((value) => value.hashCode))
+      ..addAll(Css!.keys.map((key) => key.hashCode))
+      ..addAll(Css!.values.map((value) => value.hashCode))
+      ..addAll(Images!.keys.map((key) => key.hashCode))
+      ..addAll(Images!.values.map((value) => value.hashCode))
+      ..addAll(Fonts!.keys.map((key) => key.hashCode))
+      ..addAll(Fonts!.values.map((value) => value.hashCode))
+      ..addAll(AllFiles!.keys.map((key) => key.hashCode))
+      ..addAll(AllFiles!.values.map((value) => value.hashCode));
 
     return hashObjects(objects);
   }

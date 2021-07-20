@@ -17,9 +17,9 @@ main() async {
       ..RequiredNamespace = ".NET Namespace"
   ];
 
-  EpubManifest testManifest;
+  EpubManifest? testManifest;
   setUp(() async {
-    testManifest = new EpubManifest()..Items = List.from(reference.Items);
+    testManifest = new EpubManifest()..Items = List.from(reference.Items!);
   });
   tearDown(() async {
     testManifest = null;
@@ -31,7 +31,7 @@ main() async {
       });
 
       test("is false when Items changes", () async {
-        testManifest.Items.add(new EpubManifestItem()
+        testManifest!.Items!.add(new EpubManifestItem()
           ..Fallback = "Some Different Fallback"
           ..FallbackStyle = "A less than Stylish Fallback"
           ..Href = "Some Different HREF"
@@ -50,7 +50,7 @@ main() async {
       });
 
       test("is false when Items changes", () async {
-        testManifest.Items.add(new EpubManifestItem()
+        testManifest!.Items!.add(new EpubManifestItem()
           ..Fallback = "Some Different Fallback"
           ..FallbackStyle = "A less than Stylish Fallback"
           ..Href = "Some Different HREF"

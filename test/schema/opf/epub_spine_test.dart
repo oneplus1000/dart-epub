@@ -20,10 +20,10 @@ main() async {
     ]
     ..TableOfContents = randomString.randomAlpha(length);
 
-  EpubSpine testSpine;
+  EpubSpine? testSpine;
   setUp(() async {
     testSpine = new EpubSpine()
-      ..Items = List.from(reference.Items)
+      ..Items = List.from(reference.Items!)
       ..TableOfContents = reference.TableOfContents;
   });
   tearDown(() async {
@@ -36,7 +36,7 @@ main() async {
         expect(testSpine, equals(reference));
       });
       test("is false when Items changes", () async {
-        testSpine.Items = [
+        testSpine!.Items = [
           new EpubSpineItemRef()
             ..IdRef = randomString.randomAlpha(length)
             ..IsLinear = false
@@ -44,7 +44,7 @@ main() async {
         expect(testSpine, isNot(reference));
       });
       test("is false when TableOfContents changes", () async {
-        testSpine.TableOfContents = randomString.randomAlpha(length);
+        testSpine!.TableOfContents = randomString.randomAlpha(length);
         expect(testSpine, isNot(reference));
       });
     });
@@ -54,7 +54,7 @@ main() async {
         expect(testSpine.hashCode, equals(reference.hashCode));
       });
       test("is false when IsLinear changes", () async {
-        testSpine.Items = [
+        testSpine!.Items = [
           new EpubSpineItemRef()
             ..IdRef = randomString.randomAlpha(length)
             ..IsLinear = false
@@ -62,7 +62,7 @@ main() async {
         expect(testSpine.hashCode, isNot(reference.hashCode));
       });
       test("is false when TableOfContents changes", () async {
-        testSpine.TableOfContents = randomString.randomAlpha(length);
+        testSpine!.TableOfContents = randomString.randomAlpha(length);
         expect(testSpine.hashCode, isNot(reference.hashCode));
       });
     });

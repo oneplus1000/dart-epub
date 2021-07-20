@@ -11,10 +11,10 @@ main() async {
   final generator = new RandomDataGenerator(new Random(7898), 10);
   final EpubNavigationDocTitle reference = generator.randomNavigationDocTitle();
 
-  EpubNavigationDocTitle testNavigationDocTitle;
+  EpubNavigationDocTitle? testNavigationDocTitle;
   setUp(() async {
     testNavigationDocTitle = new EpubNavigationDocTitle()
-      ..Titles = List.from(reference.Titles);
+      ..Titles = List.from(reference.Titles!);
   });
   tearDown(() async {
     testNavigationDocTitle = null;
@@ -27,7 +27,7 @@ main() async {
       });
 
       test("is false when Titles changes", () async {
-        testNavigationDocTitle.Titles.add(generator.randomString());
+        testNavigationDocTitle!.Titles!.add(generator.randomString());
         expect(testNavigationDocTitle, isNot(reference));
       });
     });
@@ -38,7 +38,7 @@ main() async {
       });
 
       test("is false when Titles changes", () async {
-        testNavigationDocTitle.Titles.add(generator.randomString());
+        testNavigationDocTitle!.Titles!.add(generator.randomString());
         expect(testNavigationDocTitle.hashCode, isNot(reference.hashCode));
       });
     });

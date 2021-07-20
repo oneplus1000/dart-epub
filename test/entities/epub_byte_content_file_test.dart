@@ -11,11 +11,11 @@ main() async {
     ..ContentType = EpubContentType.OTHER
     ..FileName = "orthrosFile";
 
-  EpubByteContentFile testFile;
+  EpubByteContentFile? testFile;
 
   setUp(() async {
     testFile = new EpubByteContentFile();
-    testFile
+    testFile!
       ..Content = reference.Content
       ..ContentMimeType = reference.ContentMimeType
       ..ContentType = reference.ContentType
@@ -32,22 +32,22 @@ main() async {
     });
 
     test(".equals is false when Content changes", () async {
-      testFile.Content = [3, 2, 1, 0];
+      testFile!.Content = [3, 2, 1, 0];
       expect(testFile, isNot(reference));
     });
 
     test(".equals is false when ContentMimeType changes", () async {
-      testFile.ContentMimeType = "application/different";
+      testFile!.ContentMimeType = "application/different";
       expect(testFile, isNot(reference));
     });
 
     test(".equals is false when ContentType changes", () async {
-      testFile.ContentType = EpubContentType.CSS;
+      testFile!.ContentType = EpubContentType.CSS;
       expect(testFile, isNot(reference));
     });
 
     test(".equals is false when FileName changes", () async {
-      testFile.FileName = "a_different_file_name.txt";
+      testFile!.FileName = "a_different_file_name.txt";
       expect(testFile, isNot(reference));
     });
 
@@ -56,22 +56,22 @@ main() async {
     });
 
     test('.hashCode changes when Content changes', () async {
-      testFile.Content = [3, 2, 1, 0];
+      testFile!.Content = [3, 2, 1, 0];
       expect(testFile.hashCode, isNot(reference.hashCode));
     });
 
     test('.hashCode changes when ContentMimeType changes', () async {
-      testFile.ContentMimeType = "application/orthros";
+      testFile!.ContentMimeType = "application/orthros";
       expect(testFile.hashCode, isNot(reference.hashCode));
     });
 
     test('.hashCode changes when ContentType changes', () async {
-      testFile.ContentType = EpubContentType.CSS;
+      testFile!.ContentType = EpubContentType.CSS;
       expect(testFile.hashCode, isNot(reference.hashCode));
     });
 
     test('.hashCode changes when FileName changes', () async {
-      testFile.FileName = "a_different_file_name";
+      testFile!.FileName = "a_different_file_name";
       expect(testFile.hashCode, isNot(reference.hashCode));
     });
   });

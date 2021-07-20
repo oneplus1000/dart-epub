@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:image/image.dart' as images;
 
 import '../ref_entities/epub_book_ref.dart';
@@ -8,39 +9,37 @@ import '../schema/opf/epub_manifest_item.dart';
 import '../schema/opf/epub_metadata_meta.dart';
 
 class BookCoverReader {
-  static Future<images.Image> readBookCover(EpubBookRef bookRef) async {
-    List<EpubMetadataMeta> metaItems =
-        bookRef.Schema.Package.Metadata.MetaItems;
+  static Future<images.Image?> readBookCover(EpubBookRef bookRef) async {
+    List<EpubMetadataMeta>? metaItems =
+        bookRef.Schema!.Package!.Metadata!.MetaItems;
     if (metaItems == null || metaItems.length == 0) return null;
 
-    EpubMetadataMeta coverMetaItem = metaItems.firstWhere(
+    EpubMetadataMeta? coverMetaItem = metaItems.firstWhereOrNull(
         (EpubMetadataMeta metaItem) =>
-            metaItem.Name != null && metaItem.Name.toLowerCase() == "cover",
-        orElse: () => null);
+            metaItem.Name != null && metaItem.Name!.toLowerCase() == "cover");
     if (coverMetaItem == null) return null;
-    if (coverMetaItem.Content == null || coverMetaItem.Content.isEmpty)
+    if (coverMetaItem.Content == null || coverMetaItem.Content!.isEmpty)
       throw new Exception(
           "Incorrect EPUB metadata: cover item content is missing.");
 
-    EpubManifestItem coverManifestItem = bookRef.Schema.Package.Manifest.Items
-        .firstWhere(
+    EpubManifestItem? coverManifestItem = bookRef.Schema!.Package!.Manifest!.Items!
+        .firstWhereOrNull(
             (EpubManifestItem manifestItem) =>
-                manifestItem.Id.toLowerCase() ==
-                coverMetaItem.Content.toLowerCase(),
-            orElse: () => null);
+                manifestItem.Id!.toLowerCase() ==
+                coverMetaItem.Content!.toLowerCase());
     if (coverManifestItem == null)
       throw new Exception(
           "Incorrect EPUB manifest: item with ID = \"${coverMetaItem.Content}\" is missing.");
 
-    EpubByteContentFileRef coverImageContentFileRef;
-    if (!bookRef.Content.Images.containsKey(coverManifestItem.Href))
+    EpubByteContentFileRef? coverImageContentFileRef;
+    if (!bookRef.Content!.Images!.containsKey(coverManifestItem.Href))
       throw new Exception(
           "Incorrect EPUB manifest: item with href = \"${coverManifestItem.Href}\" is missing.");
 
-    coverImageContentFileRef = bookRef.Content.Images[coverManifestItem.Href];
+    coverImageContentFileRef = bookRef.Content!.Images![coverManifestItem.Href!];
     List<int> coverImageContent =
-        await coverImageContentFileRef.readContentAsBytes();
-    images.Image retval = images.decodeImage(coverImageContent);
+        await coverImageContentFileRef!.readContentAsBytes();
+    images.Image? retval = images.decodeImage(coverImageContent);
     return retval;
   }
 }

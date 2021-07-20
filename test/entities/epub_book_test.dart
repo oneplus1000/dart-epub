@@ -15,10 +15,10 @@ main() async {
     ..Schema = new EpubSchema()
     ..Title = "A Dissertation on Epubs";
 
-  EpubBook testBook;
+  EpubBook? testBook;
   setUp(() async {
     testBook = new EpubBook();
-    testBook
+    testBook!
       ..Author = reference.Author
       ..AuthorList = reference.AuthorList
       ..Chapters = reference.Chapters
@@ -45,19 +45,19 @@ main() async {
           ..FileName = "orthros.txt";
 
         EpubContent content = new EpubContent();
-        content.AllFiles["hello"] = file;
-        testBook.Content = content;
+        content.AllFiles!["hello"] = file;
+        testBook!.Content = content;
 
         expect(testBook, isNot(reference));
       });
 
       test("is false when Author changes", () async {
-        testBook.Author = "NotOrthros";
+        testBook!.Author = "NotOrthros";
         expect(testBook, isNot(reference));
       });
 
       test("is false when AuthorList changes", () async {
-        testBook.AuthorList = ["NotOrthros"];
+        testBook!.AuthorList = ["NotOrthros"];
         expect(testBook, isNot(reference));
       });
 
@@ -66,24 +66,24 @@ main() async {
         chapter
           ..Title = "A Brave new Epub"
           ..ContentFileName = "orthros.txt";
-        testBook.Chapters = [chapter];
+        testBook!.Chapters = [chapter];
         expect(testBook, isNot(reference));
       });
 
       test("is false when CoverImage changes", () async {
-        testBook.CoverImage = new Image(200, 200);
+        testBook!.CoverImage = new Image(200, 200);
         expect(testBook, isNot(reference));
       });
 
       test("is false when Schema changes", () async {
         var schema = new EpubSchema();
         schema.ContentDirectoryPath = "some/random/path";
-        testBook.Schema = schema;
+        testBook!.Schema = schema;
         expect(testBook, isNot(reference));
       });
 
       test("is false when Title changes", () async {
-        testBook.Title = "The Philosophy of Epubs";
+        testBook!.Title = "The Philosophy of Epubs";
         expect(testBook, isNot(reference));
       });
     });
@@ -102,19 +102,19 @@ main() async {
           ..FileName = "orthros.txt";
 
         EpubContent content = new EpubContent();
-        content.AllFiles["hello"] = file;
-        testBook.Content = content;
+        content.AllFiles!["hello"] = file;
+        testBook!.Content = content;
 
         expect(testBook.hashCode, isNot(reference.hashCode));
       });
 
       test("is false when Author changes", () async {
-        testBook.Author = "NotOrthros";
+        testBook!.Author = "NotOrthros";
         expect(testBook.hashCode, isNot(reference.hashCode));
       });
 
       test("is false when AuthorList changes", () async {
-        testBook.AuthorList = ["NotOrthros"];
+        testBook!.AuthorList = ["NotOrthros"];
         expect(testBook.hashCode, isNot(reference.hashCode));
       });
 
@@ -123,24 +123,24 @@ main() async {
         chapter
           ..Title = "A Brave new Epub"
           ..ContentFileName = "orthros.txt";
-        testBook.Chapters = [chapter];
+        testBook!.Chapters = [chapter];
         expect(testBook.hashCode, isNot(reference.hashCode));
       });
 
       test("is false when CoverImage changes", () async {
-        testBook.CoverImage = new Image(200, 200);
+        testBook!.CoverImage = new Image(200, 200);
         expect(testBook.hashCode, isNot(reference.hashCode));
       });
 
       test("is false when Schema changes", () async {
         var schema = new EpubSchema();
         schema.ContentDirectoryPath = "some/random/path";
-        testBook.Schema = schema;
+        testBook!.Schema = schema;
         expect(testBook.hashCode, isNot(reference.hashCode));
       });
 
       test("is false when Title changes", () async {
-        testBook.Title = "The Philosophy of Epubs";
+        testBook!.Title = "The Philosophy of Epubs";
         expect(testBook.hashCode, isNot(reference.hashCode));
       });
     });

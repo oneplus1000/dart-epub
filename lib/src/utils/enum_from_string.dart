@@ -3,10 +3,10 @@ class EnumFromString<T> {
 
   EnumFromString(List<T> this.enumValues);
 
-  T get(String value) {
+  T? get(String value) {
     value = "$T.$value";
     try {
-      var x = this
+      T x = this
           .enumValues
           .firstWhere((f) => f.toString().toUpperCase() == value.toUpperCase());
       return x;

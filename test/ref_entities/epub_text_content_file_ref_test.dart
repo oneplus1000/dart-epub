@@ -14,14 +14,14 @@ main() async {
     ..ContentMimeType = "application/test"
     ..ContentType = EpubContentType.OTHER
     ..FileName = "orthrosFile";
-  EpubTextContentFileRef testFile;
+  EpubTextContentFileRef? testFile;
 
   setUp(() async {
     var arch2 = new Archive();
     var epubRef2 = new EpubBookRef(arch2);
 
     testFile = new EpubTextContentFileRef(epubRef2);
-    testFile
+    testFile!
       ..ContentMimeType = reference.ContentMimeType
       ..ContentType = reference.ContentType
       ..FileName = reference.FileName;
@@ -37,17 +37,17 @@ main() async {
       });
 
       test("is false when ContentMimeType changes", () async {
-        testFile.ContentMimeType = "application/different";
+        testFile!.ContentMimeType = "application/different";
         expect(testFile, isNot(reference));
       });
 
       test("is false when ContentType changes", () async {
-        testFile.ContentType = EpubContentType.CSS;
+        testFile!.ContentType = EpubContentType.CSS;
         expect(testFile, isNot(reference));
       });
 
       test("is false when FileName changes", () async {
-        testFile.FileName = "a_different_file_name.txt";
+        testFile!.FileName = "a_different_file_name.txt";
         expect(testFile, isNot(reference));
       });
     });
@@ -57,17 +57,17 @@ main() async {
       });
 
       test('changes when ContentMimeType changes', () async {
-        testFile.ContentMimeType = "application/orthros";
+        testFile!.ContentMimeType = "application/orthros";
         expect(testFile.hashCode, isNot(reference.hashCode));
       });
 
       test('changes when ContentType changes', () async {
-        testFile.ContentType = EpubContentType.CSS;
+        testFile!.ContentType = EpubContentType.CSS;
         expect(testFile.hashCode, isNot(reference.hashCode));
       });
 
       test('changes when FileName changes', () async {
-        testFile.FileName = "a_different_file_name";
+        testFile!.FileName = "a_different_file_name";
         expect(testFile.hashCode, isNot(reference.hashCode));
       });
     });

@@ -14,15 +14,17 @@ main() async {
     ..Package = new EpubPackage()
     ..Navigation = new EpubNavigation()
     ..ContentDirectoryPath = "some/random/path";
-  reference.Package.Version = EpubVersion.Epub2;
+  reference.Package!.Version = EpubVersion.Epub2;
 
-  EpubSchema testSchema;
+  EpubSchema? testSchema;
   setUp(() async {
     testSchema = new EpubSchema();
-    testSchema
-      ..Package = reference.Package
-      ..Navigation = reference.Navigation
-      ..ContentDirectoryPath = reference.ContentDirectoryPath;
+    if (testSchema != null) {
+      testSchema!
+        ..Package = reference.Package
+        ..Navigation = reference.Navigation
+        ..ContentDirectoryPath = reference.ContentDirectoryPath;
+    }
   });
   tearDown(() async {
     testSchema = null;
@@ -38,12 +40,12 @@ main() async {
           ..Guide = new EpubGuide()
           ..Version = EpubVersion.Epub3;
 
-        testSchema.Package = package;
+        testSchema!.Package = package;
         expect(testSchema, isNot(reference));
       });
 
       test("is false when Navigation changes", () async {
-        testSchema.Navigation = new EpubNavigation()
+        testSchema!.Navigation = new EpubNavigation()
           ..DocTitle = new EpubNavigationDocTitle()
           ..DocAuthors = [new EpubNavigationDocAuthor()];
 
@@ -51,7 +53,7 @@ main() async {
       });
 
       test("is false when ContentDirectoryPath changes", () async {
-        testSchema.ContentDirectoryPath = "some/other/random/path/to/dev/null";
+        testSchema!.ContentDirectoryPath = "some/other/random/path/to/dev/null";
         expect(testSchema, isNot(reference));
       });
     });
@@ -66,12 +68,12 @@ main() async {
           ..Guide = new EpubGuide()
           ..Version = EpubVersion.Epub3;
 
-        testSchema.Package = package;
+        testSchema!.Package = package;
         expect(testSchema.hashCode, isNot(reference.hashCode));
       });
 
       test("is false when Navigation changes", () async {
-        testSchema.Navigation = new EpubNavigation()
+        testSchema!.Navigation = new EpubNavigation()
           ..DocTitle = new EpubNavigationDocTitle()
           ..DocAuthors = [new EpubNavigationDocAuthor()];
 
@@ -79,7 +81,7 @@ main() async {
       });
 
       test("is false when ContentDirectoryPath changes", () async {
-        testSchema.ContentDirectoryPath = "some/other/random/path/to/dev/null";
+        testSchema!.ContentDirectoryPath = "some/other/random/path/to/dev/null";
         expect(testSchema.hashCode, isNot(reference.hashCode));
       });
     });
